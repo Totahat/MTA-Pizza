@@ -108,7 +108,7 @@ void main() {
 				printf("\nYou have exceeded the maximum amount  of toppings allowed  on one pizza! Current topping not added.\n");
 				pizza.mushrooms = 0;
 			}
-			pizzap = (float)(pizza.length * pizza.width) / (pizzasize * pizzasize) * pizzaprice;
+			pizzap = (double)(pizza.length * pizza.width) / (pizzasize * pizzasize) * pizzaprice;
 			switch (pizza.doughType) {
 			case 'r':
 				doughp = 0;
@@ -128,13 +128,13 @@ void main() {
 				olivep = 0;
 				break;
 			case 1:
-				olivep = (float)(pizza.length * pizza.width) / (pizzasize * pizzasize) * oliveprice;
+				olivep = (double)(pizza.length * pizza.width) / (pizzasize * pizzasize) * oliveprice;
 				break;
 			case 2:
-				olivep = (float)(pizza.length * pizza.width * halfpizza) / (pizzasize * pizzasize) * oliveprice;
+				olivep = (double)(pizza.length * pizza.width * halfpizza) / (pizzasize * pizzasize) * oliveprice;
 				break;
 			case 3:
-				olivep = (float)(pizza.length * pizza.width * quarterpizza) / (pizzasize * pizzasize) * oliveprice;
+				olivep = (double)(pizza.length * pizza.width * quarterpizza) / (pizzasize * pizzasize) * oliveprice;
 				break;
 			}
 			switch (pizza.mushrooms) {
@@ -142,13 +142,13 @@ void main() {
 				shroomp = 0;
 				break;
 			case 1:
-				shroomp = (float)(pizza.length * pizza.width) / (pizzasize * pizzasize) * shroomprice;
+				shroomp = (double)(pizza.length * pizza.width) / (pizzasize * pizzasize) * shroomprice;
 				break;
 			case 2:
-				shroomp = (float)(pizza.length * pizza.width * halfpizza) / (pizzasize * pizzasize) * shroomprice;
+				shroomp = (double)(pizza.length * pizza.width * halfpizza) / (pizzasize * pizzasize) * shroomprice;
 				break;
 			case 3:
-				shroomp = (float)(pizza.length * pizza.width * quarterpizza) / (pizzasize * pizzasize) * shroomprice;
+				shroomp = (double)(pizza.length * pizza.width * quarterpizza) / (pizzasize * pizzasize) * shroomprice;
 				break;
 			}
 			pizza.price = pizzap + shroomp + olivep + doughp;
