@@ -1,11 +1,18 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdbool.h>
 typedef struct Pizza{
 int length; //pizza length (cm)
 int width;  //pizza width (cm)
 char doughType; //dough type ('r'/'v'/'w'/'f')
 int olives;  //olives amount (0/1/2/3)
 int mushrooms; //mushrooms amount (0/1/2/3)
+double tomatoes;
+double pineapple;
+char q1;
+char q2;
+char q3;
+char q4;
 double price;  //pizza price (Without tax)
 }Pizza;
 #define VEGAN_DOUGH_PRICE 5 //price for vegan dough constant
@@ -22,6 +29,8 @@ double price;  //pizza price (Without tax)
 #define MAX_WIDTH 80 // maximum width value
 #define MIN_SIZE 10 // minimum size value
 #define Tax 1.17 // tax multiplier
+#define TOMATOES_PRICE 9
+#define PINEAPPLE_PRICE 14
  
 void main() {
 	Pizza pizza;
@@ -36,19 +45,8 @@ void main() {
 	int payment=0, change; // variables for the change and payment 
 	int tens=0, fives=0, twos=0, ones=0; // variables for the change count
 	printf("Welcome to MTA-Pizza!\n\n*****\n ***\n  *\n\n");
-	printf("Please enter your ID number:\n");
-	scanf("%d", &ID);
-	printf("\nOur menu:\n");
-	printf("*********\n");
-	printf("Basic pizza: %.2f NIS for %dx%d size pizza\n\n", PIZZA_PRICE, PIZZA_SIZE, PIZZA_SIZE);
-	printf("Toppings for basic size pizza:\n");
-	printf("Olives: %d NIS\n", OLIVES_PRICE);
-	printf("Mushrooms: %d NIS\n\n", MUSHROOMS_PRICE );
-	printf("Dough type for basic size pizza:\n");
-	printf("Regular: %d NIS\n", REGULAR_DOUGH_PRICE );
-	printf("Vegan: %d NIS\n", VEGAN_DOUGH_PRICE );
-	printf("Whole wheat: %d NIS\n", WHOLE_WHEAT_DOUGH_PRICE);
-	printf("Gluten free: %d NIS\n\n", GLUTEN_FREE_DOUGH_PRICE);
+	ID=getIDNumber();
+	printMenu();
 	printf("How many pizzas would you like to order?");
 	scanf("%d", &pizzaAmount);  
 	if (pizzaAmount <= 0) { //checking if the client dont want pizzas
@@ -217,4 +215,56 @@ void main() {
 		}
 		printf("Thank you for your order!");
 	}
+}
+int getIDNumber(){
+	int id, sum,last, temp, corrent,multi=2;
+	bool check=2;
+	printf("Please enter ID number:");
+	scanf("%d", &id);
+	while(check==false){
+	temp=id;
+	last=id%10;
+	while(temp>0){
+		corrent=(temp%10)*multi;
+		if(multi==2)
+		multi=1;
+		else 
+		multi=2;
+		temp=temp/10;
+		while(corrent!=0){
+			sum+=corrent/10;
+			corrent=corrent%10;
+		}
+	}
+	if(last%2==0)
+	sum+=id;
+	else
+	sum+=id-1;
+	if(sum%10==0)
+	check=1;
+	else{
+		printf("invalid ID number, please enter a new number");
+        scanf("%d", &id);
+	}
+	}
+	return id;
+}
+void printMenu(){
+	printf("\nOur menu:\n");
+	printf("*********\n");
+	printf("Basic pizza: %.2f NIS for %dx%d size pizza\n\n", PIZZA_PRICE, PIZZA_SIZE, PIZZA_SIZE);
+	printf("Toppings for basic size pizza:\n");
+	printf("Olives: %d NIS\n", OLIVES_PRICE);
+	printf("Mushrooms: %d NIS\n", MUSHROOMS_PRICE );
+	printf("Tomatoes: %d NIS\n", TOMATOES_PRICE);
+	printf("Pineapple: %d NIS\n\n", PINEAPPLE_PRICE);
+	printf("Dough type for basic size pizza:\n");
+	printf("Regular: %d NIS\n", REGULAR_DOUGH_PRICE );
+	printf("Vegan: %d NIS\n", VEGAN_DOUGH_PRICE );
+	printf("Whole wheat: %d NIS\n", WHOLE_WHEAT_DOUGH_PRICE);
+	printf("Gluten free: %d NIS\n\n", GLUTEN_FREE_DOUGH_PRICE);
+
+}
+int getNumOfPizzas(){
+	
 }
