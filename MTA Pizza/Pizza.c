@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS  //313528168 yakir twil
 #include <stdio.h>
 typedef struct Pizza{
 int length; //pizza length (cm)
@@ -24,14 +24,14 @@ double price;  //pizza price (Without tax)
  
 void main() {
 	Pizza pizza;
-	int ID;
+	int ID;  //
 	int delivery;
 	double price=0;
 	double pizzap, olivep, shroomp, doughp;
 	int pricetax;
 	int Pizzaamount;
 	int balance;
-	int i;
+	int i; // counter for the for loop
 	int payment=0, change;
 	int tens=0, fives=0, twos=0, ones=0;
 	printf("Welcome to MTA-Pizza!\n\n*****\n ***\n  *\n\n");
@@ -122,6 +122,8 @@ void main() {
 			case 'f':
 				doughp = (double)(pizza.length * pizza.width) / (pizzasize * pizzasize) * glutenfreeDP;
 				break;
+				default
+
 			}
 			switch (pizza.olives) {
 			case 0:
