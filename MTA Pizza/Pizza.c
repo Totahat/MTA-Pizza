@@ -5,10 +5,10 @@ typedef struct Pizza{
 int length; //pizza length (cm)
 int width;  //pizza width (cm)
 char doughType; //dough type ('r'/'v'/'w'/'f')
-int olives;  //olives amount (0/1/2/3)
-int mushrooms; //mushrooms amount (0/1/2/3)
-int tomatos;
-int pineapple;
+double olives;  //olives amount (0/1/2/3)
+double mushrooms; //mushrooms amount (0/1/2/3)
+double tomatos;
+double pineapple;
 int quarters;
 char q1;
 char q2;
@@ -27,16 +27,15 @@ int getDelivery();
 Pizza getPizzaDimensions();
 Pizza getDoughType(Pizza pizza);
 Pizza getToppings(Pizza pizza);
-int toppingChoice(Pizza pizza);
+double toppingChoice(Pizza pizza);
 Pizza getolives(Pizza pizza);
 Pizza getToppings(Pizza pizza);
-Pizza putToppings(Pizza pizza, char topping, int check);
+Pizza putToppings(Pizza pizza, char topping, double check);
 void printLine(char a, int length);
 void printPizzaDetails(Pizza pizza, int i);
 void printPizza(Pizza pizza);
 void getPayment(int totalPrice);
 double calculateDough(char dough, int length, int width);
-double calculateToppings(int length, int width, int part, double price);
 Balance coinCounter(int change, int decrement);
 #define VEGAN_DOUGH_PRICE 5.0 //price for vegan dough constant
 #define REGULAR_DOUGH_PRICE 0 //price for regular dough constant
@@ -96,10 +95,10 @@ void main() {
 			pizza = getToppings(pizza);
 			pizzaPrice = (double)(pizza.length * pizza.width) / (double)(PIZZA_LENGTH * PIZZA_WIDTH) * PIZZA_PRICE;
 			doughPrice = calculateDough(pizza.doughType, pizza.length, pizza.width);
-			olivePrice = calculateToppings(pizza.length,pizza.width,pizza.olives,OLIVES_PRICE);
-			mushroomPrice = calculateToppings(pizza.length, pizza.width, pizza.mushrooms, MUSHROOMS_PRICE);
-			tomatosPrice = calculateToppings(pizza.length, pizza.width, pizza.tomatos, TOMATOS_PRICE);
-			pineapplePrice = calculateToppings(pizza.length, pizza.width, pizza.pineapple, PINEAPPLE_PRICE);
+			olivePrice = (double)(pizza.length * pizza.width * pizza.olives) / (PIZZA_LENGTH * PIZZA_WIDTH) * OLIVES_PRICE;
+			mushroomPrice = (double)(pizza.length * pizza.width * pizza.mushrooms) / (PIZZA_LENGTH * PIZZA_WIDTH) * MUSHROOMS_PRICE;
+			tomatosPrice = (double)(pizza.length * pizza.width * pizza.tomatos) / (PIZZA_LENGTH * PIZZA_WIDTH) * TOMATOS_PRICE;
+			pineapplePrice = (double)(pizza.length * pizza.width * pizza.pineapple) / (PIZZA_LENGTH * PIZZA_WIDTH) * PINEAPPLE_PRICE;
 			pizza.price = (double)(pizzaPrice + mushroomPrice + olivePrice + doughPrice+ tomatosPrice+ pineapplePrice); // calculating the price of the corrent pizza
 			printPizzaDetails(pizza, i);
 			totalPrice = totalPrice + pizza.price; // adding to the total price of the order
@@ -231,35 +230,49 @@ Pizza getDoughType(Pizza pizza) {
 	}
 	return pizza;
 }
-int toppingChoice(Pizza pizza) {
-	bool choice = TRUE, max = TRUE;
-	int res;
-	while (choice || max) {
-		choice = FALSE;
-		max = FALSE;
+double toppingChoice(Pizza pizza) {
+	bool check = TRUE;
+	double ana;
+	int res, quarterwsWithToppings;
+	while (check) {
+		quarterwsWithToppings = pizza.quarters;
+		check = FALSE;
+		ana = 0;
 		printf("0. None\n");
 		printf("1. Whole pizza\n");
 		printf("2. Half pizza\n");
 		printf("3. Quarter pizza\n");
-		scanf(" %d", &res); //tomatoes input
-		if (res > 3 && res < 0) {
-			choice = TRUE;
+		scanf(" %d", &res);
+		switch (res) {
+		case 0: 
+			break;
+		case 1: 
+			quarterwsWithToppings += 4;
+			ana = 1;
+			break;
+		case 2:
+			quarterwsWithToppings += 2;
+			ana = 0.5;
+			break;
+		case 3:
+			quarterwsWithToppings += 1;
+			ana = 0.25;
+			break;
+		default:
+			check = TRUE;
 			printf("Invalid choice! Try again.\n\n");
 		}
-		if ((pizza.quarters != 0) && res == 1) {
+		if (quarterwsWithToppings>4) {
 			printf("You have exceeded the maximum amount of toppings allowed on one pizza! Try again.\n");
-			max = TRUE;
-		}
-		else if (res == 2 && pizza.quarters > TWO_QUARTERS) {
-			printf("You have exceeded the maximum amount of toppings allowed on one pizza! Try again.\n");
-			max = TRUE;
+			check = TRUE;
 		}
 	}
-		return res;
+		return ana;
 	}
-Pizza putToppings(Pizza pizza, char topping,int check) {
+Pizza putToppings(Pizza pizza, char topping,double toppings) {
+	int check = (int)(toppings * 4);
 	switch (check) {
-	case 1:
+	case 4:
 		pizza.q1 = topping;
 		pizza.q2 = topping;
 		pizza.q3 = topping;
@@ -270,37 +283,31 @@ Pizza putToppings(Pizza pizza, char topping,int check) {
 		if (pizza.quarters == TWO_QUARTERS ) {
 			pizza.q3 = topping;
 			pizza.q4 = topping;
-			pizza.quarters += TWO_QUARTERS;
-			return pizza;
 		}
 		else if (pizza.quarters == ONE_QUARTER) {
 			pizza.q2 = topping;
 			pizza.q3 = topping;
-			pizza.quarters += TWO_QUARTERS;
 		}
 		else {
 			pizza.q1 = topping;
 			pizza.q2 = topping;
-			pizza.quarters += TWO_QUARTERS;
 		}
+		pizza.quarters += TWO_QUARTERS;
 		break;
-	case 3:
+	case 1:
 		if (pizza.quarters == ONE_QUARTER) {
 			pizza.q2 = topping;
-			pizza.quarters += ONE_QUARTER;
 		}
 		else if (pizza.quarters == TWO_QUARTERS) {
 			pizza.q3 = topping;
-			pizza.quarters += ONE_QUARTER;
 		}
 		else if (pizza.quarters == THREE_QUARTERS) {
 			pizza.q4 = topping;
-			pizza.quarters += ONE_QUARTER;
 		}
 		else {
 			pizza.q1 = topping;
-			pizza.quarters += ONE_QUARTER;
 		}
+		pizza.quarters += ONE_QUARTER;
 	}
 	return pizza;
 }
@@ -362,24 +369,6 @@ void printLine(char a,int width) {
 		printf("%c", a);
 	printf("\n");
 }
-double calculateToppings(int length, int width, int part, double price) {
-	double res = 0;
-	switch (part) { // switch to check the section of the pizza with olives
-	case 0:
-		res = 0;
-		break;
-	case 1:
-		res = (double)(length * width) / (double)(PIZZA_LENGTH * PIZZA_WIDTH) * (double)price;
-		break;
-	case 2:
-		res = (double)(length * width * HALF_PIZZA) / (double)(PIZZA_LENGTH * PIZZA_WIDTH) * (double)price;
-		break;
-	case 3:
-		res = (double)(length * width * QUARTER_PIZZA) / (double)(PIZZA_LENGTH * PIZZA_WIDTH) * (double)price;
-		break;
-	}
-	return res;
-}
 double calculateDough(char dough, int length, int width) {
 	double res=0;
 	switch (dough) { //switch to check the dough type and and calculated the price 
@@ -418,7 +407,7 @@ int getDelivery() {
 	return res;
 }
 void getPayment(int totalPrice) {
-	int payment, balance, change;
+	int payment, balance;
 	Balance check;
 	printf("\nPlease enter your payment: ");
 	scanf(" %d", &payment); // takes payment input
