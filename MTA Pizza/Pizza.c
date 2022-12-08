@@ -5,18 +5,18 @@ typedef struct Pizza{
 int length; //pizza length (cm)
 int width;  //pizza width (cm)
 char doughType; //dough type ('r'/'v'/'w'/'f')
-double olives;  //olives amount (0/1/2/3)
-double mushrooms; //mushrooms amount (0/1/2/3)
-double tomatos;
-double pineapple;
-int quarters;
-char q1;
-char q2;
-char q3;
-char q4;
+double olives;  //olives amount (0/0.25/0.5/1)
+double mushrooms; //mushrooms amount (0/0.25/0.5/1)
+double tomatos; //tomatos amount (0/0.25/0.5/1)
+double pineapple; // pineapple ammount (0/0.25/0.5/1)
+int quarters; //total amount of quarters with toppings (1/2/3/4)
+char q1; //topping type of the first quarter (O/M/T/P)
+char q2; //topping type of the second quarter (O/M/T/P)
+char q3; //topping type of the third quarter (O/M/T/P)
+char q4; //topping type of the forth quarter (O/M/T/P)
 double price;  //pizza price (Without tax)
 }Pizza;
-typedef struct Balance {
+typedef struct Balance { //struct for the change and coin counter
 	int change;
 	int counter;
 }Balance;
@@ -52,28 +52,31 @@ Balance coinCounter(int change, int decrement);
 #define MAX_WIDTH 80 // maximum width value
 #define MIN_SIZE 10 // minimum size value
 #define Tax 1.17 // tax multiplier
-#define TOMATOS_PRICE 9.0
-#define PINEAPPLE_PRICE 14.0
-#define one 1
-#define NO_QUARTERS 0
-#define ONE_QUARTER 1
-#define TWO_QUARTERS 2
-#define THREE_QUARTERS 3
-#define FOUR_QUARTERS 4
-#define FALSE 0
-#define TRUE 1
-#define MAX_ID_DIGIT 9
-#define NO_TOPPING ' '
-#define OLIVES_TOPPINGS 'O'
-#define MUSHROOMS_TOPPINGS 'M'
-#define TOMATOS_TOPPINGS 'T'
-#define PINEAPPLE_TOPPINGS 'P'
-#define DECREMENT_TEN 10
-#define DECREMENT_FIVE 5
-#define DECREMENT_TWO 2
-#define DECREMENT_ONE 1
+#define TOMATOS_PRICE 9.0 //price of tomatos toppings
+#define PINEAPPLE_PRICE 14.0 // price of pineapple toppings
+#define one 1 //to put the value of one
+#define NO_QUARTERS 0 //no quarters with toppings
+#define ONE_QUARTER 1 // 1 quarter with tippoings
+#define TWO_QUARTERS 2 // 2 quarters with toppings
+#define THREE_QUARTERS 3 // 3 quarters with toppings
+#define FOUR_QUARTERS 4 //4 quarters with toppings
+#define FALSE 0 // false for bool
+#define TRUE 1 // true for bool
+#define MAX_ID_DIGIT 9 // mamimum number of digis for ID number
+#define NO_TOPPING ' ' // no toppings on quarter
+#define OLIVES_TOPPINGS 'O' // olive topping on quarter
+#define MUSHROOMS_TOPPINGS 'M' //mushroom topping on quarter
+#define TOMATOS_TOPPINGS 'T' //tomatos topping on quarter
+#define PINEAPPLE_TOPPINGS 'P' // pineapple topping on quarter
+#define DECREMENT_TEN 10 // decrement of 10 for change
+#define DECREMENT_FIVE 5 // decrement of 5 for change
+#define DECREMENT_TWO 2 // decrement of 2 for change
+#define DECREMENT_ONE 1 // decrement of 1 for change 
+#define REGULAR_CHAR 'r' //char for regular dough
+#define GLUTEN_FREE_CHAR 'f' //char for gluten free dough
+#define WHOLE_WHEAT_CHAR 'w'//char for whole-wheat dough
+#define VEGAN_CHAR 'v' //char for vegan dough
 
- 
 void main() {
 	Pizza pizza;
 	int ID; //variable for ID number
@@ -84,10 +87,10 @@ void main() {
 	int pizzaAmount; // variable to check the amount of pizzas
 	int i; // variable to run the for loop
 	printf("Welcome to MTA-Pizza!\n\n*****\n ***\n  *\n\n");
-	ID=getIDNumber();
-	printMenu();
-	pizzaAmount = getNumOfPizzas();
-		for (i = 1; i <= pizzaAmount; i++) { //starting the loop of building a pizza
+	ID=getIDNumber();                                       // call for function to get id number from client
+	printMenu();                                            // call for function to print menu
+	pizzaAmount = getNumOfPizzas();                         //call fo function to get ammount of pizzas
+		for (i = 1; i <= pizzaAmount; i++) {                //starting the loop of building a pizza
 			printf("\n*************************************************\n");
 			printf("Pizza #%d:\n\n", i);
 			pizza = getPizzaDimensions();
@@ -119,15 +122,15 @@ void main() {
 		getPayment(priceTax);
 		printf("Thank you for your order!");
 	}
-int getIDNumber() {
+int getIDNumber() { //function to get id and check if it is according to the algorithm and if the length is ok
 	int id, sum, last, temp1, temp2, corrent, multi, count;
 	bool check = TRUE;
 	printf("Please enter your ID number:");
 	scanf("%d", &id);
 	while (check) {
-		check = FALSE;
-		count = 0;
-		sum = 0;
+		check = FALSE;                    //the function get an input and copy it to 2 testers.
+		count = 0;                        //temp1 checks if the id is ok with the id algoritem
+		sum = 0;                          //temp2 checks if the number of integers in the input is between 1-9
 		temp1 = id;
 		temp2 = id;
 		multi = 2;
@@ -137,14 +140,14 @@ int getIDNumber() {
 			count += 1;
 			temp2 /= 10;
 		}
-		if (count > MAX_ID_DIGIT||count==FALSE) {
+		if (count > MAX_ID_DIGIT||id==0) {
 			printf("\nInvalid ID number! Try again.\n");
 			printf("Please enter your ID number:");
 			check = TRUE;
 			scanf("%d", &id);
 		}
 		else {
-			while (temp1 > 0) {
+			while (temp1 > 0) {                       //this loop checks the algorithm of the id on the number
 				corrent = (temp1 % 10) * multi;
 				if (multi == 2)
 					multi = 1;
@@ -160,14 +163,14 @@ int getIDNumber() {
 			if (sum % 10 != 0) {
 				printf("\nInvalid check digit! Try again.\n");
 				printf("Please enter your ID number:");
-				check = 1;
+				check = TRUE;
 				scanf("%d", &id);
 			}
 		}
 	}
 	return id;
 }
-void printMenu(){
+void printMenu(){                            //function to print the menu
 	printf("\n\nOur menu:\n");
 	printf("*********\n");
 	printf("Basic pizza: %.2f NIS for %dx%d size pizza\n\n", PIZZA_PRICE, PIZZA_LENGTH, PIZZA_WIDTH);
@@ -183,7 +186,7 @@ void printMenu(){
 	printf("Gluten free: %.0lf NIS\n\n", GLUTEN_FREE_DOUGH_PRICE);
 
 }
-int getNumOfPizzas(){
+int getNumOfPizzas(){         //function to get the number of pizzas
 	int res;
 	printf("How many pizzas would you like to order?");
 	scanf("%d", &res);
@@ -194,7 +197,7 @@ int getNumOfPizzas(){
 	}
 	return res;
 }
-Pizza getPizzaDimensions() {
+Pizza getPizzaDimensions() {             //function to get the dimensions of the pizza
 	Pizza res;
 	printf("Please enter your pizza's length (cm): ");
 	scanf("%d", &res.length); //length input
@@ -212,51 +215,56 @@ Pizza getPizzaDimensions() {
 	}
 	return res;
 }
-Pizza getDoughType(Pizza pizza) {
-	printf("\nPlease enter the pizza's dough type:\n");
-	printf("r - for regular\n");
-	printf("v - for vegan\n");
-	printf("w - for whole wheat\n");
-	printf("f - for gluten-free\n");
-	scanf(" %c", &pizza.doughType); // dough type input
-	while (pizza.doughType != 'r' && pizza.doughType != 'v' && pizza.doughType != 'w' && pizza.doughType != 'f') {
-		printf("Invalid choice! Try again.\n");
+Pizza getDoughType(Pizza pizza) { //function to get dough type and checks if it is one of the options
+	bool check=TRUE;
+	while (check) {
+		check=FALSE;
 		printf("\nPlease enter the pizza's dough type:\n");
-		printf("r - for regular\n");
-		printf("v - for vegan\n");
-		printf("w - for whole wheat\n");
-		printf("f - for gluten-free\n");
+	    printf("%c - for regular\n", REGULAR_CHAR);
+	    printf("%c - for vegan\n", VEGAN_CHAR);
+	    printf("%c - for whole wheat\n", WHOLE_WHEAT_CHAR);
+	    printf("%c - for gluten-free\n", GLUTEN_FREE_CHAR);
 		scanf(" %c", &pizza.doughType); // dough type input
+		switch(pizza.doughType){
+			case VEGAN_CHAR:
+			case GLUTEN_FREE_CHAR:
+			case REGULAR_CHAR:
+			case WHOLE_WHEAT_CHAR:
+			break;
+			default:
+				printf("Invalid choice! Try again.\n");
+				check=TRUE;
+		}
 	}
 	return pizza;
 }
-double toppingChoice(Pizza pizza) {
-	bool check = TRUE;
-	double ana;
-	int res, quarterwsWithToppings;
+double toppingChoice(Pizza pizza) { //function to get inpot for corrent topping choice 
+	bool check = TRUE;              // checks if it will fill more than a 4 quarters
+	double res;
+	int input, quarterwsWithToppings;
 	while (check) {
 		quarterwsWithToppings = pizza.quarters;
 		check = FALSE;
-		ana = 0;
+		res = 0;
 		printf("0. None\n");
 		printf("1. Whole pizza\n");
 		printf("2. Half pizza\n");
 		printf("3. Quarter pizza\n");
-		scanf(" %d", &res);
-		switch (res) {
+		scanf(" %d", &input);
+		switch (input) {
 		case 0: 
 			break;
 		case 1: 
 			quarterwsWithToppings += 4;
-			ana = 1;
+			res = 1;
 			break;
 		case 2:
 			quarterwsWithToppings += 2;
-			ana = 0.5;
+			res = 0.5;
 			break;
 		case 3:
 			quarterwsWithToppings += 1;
-			ana = 0.25;
+			res = 0.25;
 			break;
 		default:
 			check = TRUE;
@@ -267,13 +275,13 @@ double toppingChoice(Pizza pizza) {
 			check = TRUE;
 		}
 	}
-		return ana;
+		return res;
 	}
-Pizza putToppings(Pizza pizza, char topping,double toppings) {
+Pizza putToppings(Pizza pizza, char topping,double toppings) { 
 	int check = (int)(toppings * 4);
 	switch (check) {
-	case 4:
-		pizza.q1 = topping;
+	case 4:                          //this function gets a type of topping and the value of the input
+		pizza.q1 = topping;          // it fills the quarters variable and the char variables for the pizza print
 		pizza.q2 = topping;
 		pizza.q3 = topping;
 		pizza.q4 = topping;
@@ -311,11 +319,11 @@ Pizza putToppings(Pizza pizza, char topping,double toppings) {
 	}
 	return pizza;
 }
-Pizza getToppings(Pizza pizza) {
-	pizza.quarters = NO_QUARTERS;
-	pizza.q1 = NO_TOPPING;
-	pizza.q2 = NO_TOPPING;
-	pizza.q3 = NO_TOPPING;
+Pizza getToppings(Pizza pizza) {      // this function gets the input for all toppings 
+	pizza.quarters = NO_QUARTERS;     //it will exit if the quarters ammount gets to 4
+	pizza.q1 = NO_TOPPING;            //starts with reseting all the chars for the pizza print
+	pizza.q2 = NO_TOPPING;            // and reset all the toppings to zero incase of early return to main
+	pizza.q3 = NO_TOPPING;            // for each topping it calld for toppingChoice to get input and putToppings
 	pizza.q4 = NO_TOPPING;
 	pizza.tomatos = 0;
 	pizza.pineapple = 0;
@@ -342,7 +350,7 @@ Pizza getToppings(Pizza pizza) {
 	pizza = putToppings(pizza, PINEAPPLE_TOPPINGS, pizza.pineapple);
 	return pizza;
 }
-void printPizza(Pizza pizza){
+void printPizza(Pizza pizza){                     // this function prints the pizza with the toppings choice according to size chosen
 	printLine(pizza.doughType, pizza.width);
 	int i, j;
 	for (i = 2; i < pizza.length; i++) {
@@ -363,14 +371,14 @@ void printPizza(Pizza pizza){
 	}
 	printLine(pizza.doughType, pizza.width);
 }
-void printLine(char a,int width) {
+void printLine(char a,int width) { // this funcion prints a line of same char for the dough
 	int i;
 	for (i = 1; i <= width; i++)
 		printf("%c", a);
 	printf("\n");
 }
 double calculateDough(char dough, int length, int width) {
-	double res=0;
+double res=0;
 	switch (dough) { //switch to check the dough type and and calculated the price 
 	case 'r':
 		res = 0;
@@ -387,14 +395,14 @@ double calculateDough(char dough, int length, int width) {
 	}
 	return res;
 }
-void printPizzaDetails(Pizza pizza, int i) {
+void printPizzaDetails(Pizza pizza, int i) {   //a function to print the pizza details
 	printf("\nPizza #%d details:\n", i);
 	printf("*******************\n");
 	printf("Pizza size: %dx%d\n", pizza.length, pizza.width);
 	printf("Pizza price (without tax): %.2lf\n", pizza.price);
 	printPizza(pizza);
 }
-int getDelivery() {
+int getDelivery() {  // this function get the inpit if the client want delivery or pick up
 	int res;
 	printf("\n*************************************************");
 	printf("\nDo you want delivery for the price of %.0lf NIS? Enter 1 for delivery or 0 for pick-up: ", DELIVERY_PRICE);
@@ -406,7 +414,7 @@ int getDelivery() {
 	}
 	return res;
 }
-void getPayment(int totalPrice) {
+void getPayment(int totalPrice) {   // this function get the payment from client and prints the change
 	int payment, balance;
 	Balance check;
 	printf("\nPlease enter your payment: ");
@@ -437,7 +445,7 @@ void getPayment(int totalPrice) {
 			printf("%d coin(s) of one\n", one);
 	}
 }
-Balance coinCounter(int change,int decrement) {
+Balance coinCounter(int change,int decrement) { //tihs function counts the number of coins for each coin
 	Balance res;
 	res.change = change;
 	res.counter = 0;
