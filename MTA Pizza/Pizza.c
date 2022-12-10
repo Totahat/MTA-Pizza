@@ -240,6 +240,7 @@ Pizza getDoughType(Pizza pizza) { //function to get dough type and checks if it 
 	}
 	return pizza;
 }
+
 /*
 the function get input for corrent topping choice
 checks if the input will fill more than 4 quarters
