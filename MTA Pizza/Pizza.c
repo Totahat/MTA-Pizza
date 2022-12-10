@@ -16,6 +16,7 @@ char q3; //topping type of the third quarter (O/M/T/P)
 char q4; //topping type of the forth quarter (O/M/T/P)
 double price;  //pizza price (Without tax)
 }Pizza;
+
 typedef struct Balance { //struct for the change and coin counter
 	int change;
 	int counter;
@@ -122,6 +123,7 @@ void main() {
 		getPayment(priceTax);
 		printf("Thank you for your order!");
 	}
+	//function to get id and check if it is according to the algorithm and if the length is ok
 int getIDNumber() { //function to get id and check if it is according to the algorithm and if the length is ok
 	int id, sum, last, temp1, temp2, corrent, multi, count;
 	bool check = TRUE;
@@ -238,6 +240,11 @@ Pizza getDoughType(Pizza pizza) { //function to get dough type and checks if it 
 	}
 	return pizza;
 }
+/*
+the function get input for corrent topping choice
+checks if the input will fill more than 4 quarters
+if it does make the client choose again
+*/
 double toppingChoice(Pizza pizza) { //function to get inpot for corrent topping choice 
 	bool check = TRUE;              // checks if it will fill more than a 4 quarters
 	double res;
@@ -319,6 +326,11 @@ Pizza putToppings(Pizza pizza, char topping,double toppings) {
 	}
 	return pizza;
 }
+/*
+This function gets as input pizza details 
+IT\t gets toppings from user and 
+It returns updated pizza struct
+*/
 Pizza getToppings(Pizza pizza) {      // this function gets the input for all toppings 
 	pizza.quarters = NO_QUARTERS;     //it will exit if the quarters ammount gets to 4
 	pizza.q1 = NO_TOPPING;            //starts with reseting all the chars for the pizza print
